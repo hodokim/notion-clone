@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     icon: [
       {
         media: "(prefers-color-scheme: light)",
-        url: "/test-light.png",
-        href: "/test-light.png",
+        url: "/bnote-light.png",
+        href: "/bnote-light.png",
       },
       {
         media: "(prefers-color-scheme: dark)",
-        url: "/test-dark.png",
-        href: "/test-dark.png",
+        url: "/bnote-dark.png",
+        href: "/bnote-dark.png",
       },
     ],
   },

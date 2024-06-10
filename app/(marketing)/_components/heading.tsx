@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Heroes } from "./heroes";
 
 export const Heading = () => {
     return (
@@ -19,7 +20,6 @@ export const Heading = () => {
                 Enter Bnote
                 <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
-
         </div>
     )
 }

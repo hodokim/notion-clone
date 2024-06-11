@@ -1,3 +1,4 @@
+import { Footer } from "./(marketing)/_components/footer";
 import { Heading } from "./(marketing)/_components/heading";
 import { Heroes } from "./(marketing)/_components/heroes";
 
@@ -11,6 +12,7 @@ const MarketingPage = () =>{
           <Heading />
           <Heroes />
         </div>
+        <Footer />
       </div>
     );
 }

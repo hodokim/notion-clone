@@ -9,17 +9,23 @@ const font = Poppins({
 });
 
 export const Logo = () => {
-    return(
-        <div className="hidden md:flex items-center gap-x-2">
-            <Image
-                src="/logo.png"
-                height="40"
-                width="40"
-                alt="Logo"
-            />
-            <p className={cn("font-semibold", font.className)}>
-                Bnote
-            </p>
-        </div>
-    )
+    return (
+      <div className="hidden md:flex items-center gap-x-2">
+        <Image
+          src="/bnote-light.png"
+          height="40"
+          width="40"
+          alt="Logo"
+          className="dark:hidden"
+        />
+        <Image
+          src="/bnote-dark.png"
+          height="40"
+          width="40"
+          alt="Logo"
+          className="hidden dark:block"
+        />
+        <p className={cn("font-semibold", font.className)}>Bnote</p>
+      </div>
+    );
 }

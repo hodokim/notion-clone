@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,13 +12,13 @@ export const metadata: Metadata = {
     icon: [
       {
         media: "(prefers-color-scheme: light)",
-        url: "/test-light.png",
-        href: "/test-light.png",
+        url: "/bnote-light.png",
+        href: "/bnote-light.png",
       },
       {
         media: "(prefers-color-scheme: dark)",
-        url: "/test-dark.png",
-        href: "/test-dark.png",
+        url: "/bnote-dark.png",
+        href: "/bnote-dark.png",
       },
     ],
   },
@@ -29,8 +30,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+        storageKey="bnote-theme-2"
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

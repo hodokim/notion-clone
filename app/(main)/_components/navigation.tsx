@@ -1,18 +1,24 @@
 "use client";
 
-import {ChevronsLeft, MenuIcon} from "lucide-react";
+import {ChevronsLeft, MenuIcon, PlusCircle} from "lucide-react";
 import React, {ElementRef, useEffect, useRef, useState} from "react";
 import {useMediaQuery} from "usehooks-ts";
 import {usePathname} from "next/navigation";
+import {useMutation, useQuery} from "convex/react";
+
+
 import {cn} from "@/lib/utils";
-import {UserItem} from "./user-item";
-import {useQuery} from "convex/react";
 import {api} from "@/convex/_generated/api";
+import {toast} from "sonner";
+
+import {UserItem} from "./user-item";
+import {Item} from "./item";
 
 export const Navigation = () =>{
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const documents = useQuery(api.documents.get);
+    const create = useMutation(api.documents.create);
 
     const isResizingRef = useRef(false)
     const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -94,6 +100,16 @@ export const Navigation = () =>{
         }
     }
 
+    const handleCreate = () => {
+        const promise = create({title: "제목 없음"});
+
+        toast.promise(promise, {
+            loading: "새 노트를 만드는 중 입니다...",
+            success: "새 노트가 만들어졌습니다!",
+            error: "새 노트를 만드는 데 실패했습니다."
+        });
+    }
+
     return (
         <>
             <aside
@@ -121,6 +137,10 @@ export const Navigation = () =>{
                 </div>
                 <div>
                     <UserItem />
+                    <Item
+                        onClick={handleCreate}
+                        label="New page"
+                        icon={PlusCircle}/>
                 </div>
                 <div className="mt-4">
                     {documents?.map((document)=>(

@@ -14,7 +14,7 @@ const DocumentsPage = () => {
     const create = useMutation(api.documents.create);
 
     const onCreate = () => {
-        const promise = create({ title:"Untitled"});
+        const promise = create({ title:"제목 없음"});
 
         toast.promise(promise, {
             loading: "새 노트를 만드는 중 입니다...",

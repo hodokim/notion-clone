@@ -1,9 +1,13 @@
 "use client";
 
-import {ChevronDown, ChevronsRight, LucideIcon} from "lucide-react";
+import {ChevronDown, ChevronsRight, LucideIcon, Plus} from "lucide-react";
 import {Id} from "@/convex/_generated/dataModel";
 import {cn} from "@/lib/utils";
 import {Skeleton} from "@/components/ui/skeleton";
+import {useMutation} from "convex/react";
+import {api} from "@/convex/_generated/api";
+import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 interface ItemProps {
     label: string;
@@ -36,6 +40,36 @@ export const Item = ({
     onExpand,
     expanded
 }: ItemProps) => {
+    const router = useRouter();
+    const create = useMutation(api.documents.create);
+
+    const handleExpand = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        event.stopPropagation();
+        onExpand?.();
+    }
+
+    const onCreate = (
+        event: React.MouseEvent<HTMLDivElement,MouseEvent>
+    )=> {
+        event.stopPropagation();
+        if(!id) return;
+        const promise = create({title: "제목 없음", parentDocument: id})
+            .then((documentId) => {
+                if(!expanded) {
+                    onExpand?.();
+                }
+            //    router.push(`/documents/${documentId}`);
+            })
+        toast.promise(promise, {
+            loading: "새 노트를 만드는 중 입니다...",
+            success: "새 노트가 만들어졌습니다!",
+            error: "새 노트를 만드는 데 실패했습니다."
+        });
+
+    }
+
     const ChevronIcon = expanded ? ChevronDown : ChevronsRight;
 
 
@@ -55,7 +89,7 @@ export const Item = ({
                 <div
                     role="button"
                     className="h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
-                    onClick={()=> {}}
+                    onClick={handleExpand}
                 >
                     <ChevronIcon
                         className="h-4 w-4 shrink-0 text-muted-foreground/50"
@@ -78,6 +112,17 @@ export const Item = ({
                 text-[10px] font-medium text-muted-foreground opacity-100">
                     <span className="text-xs">CTRL</span>+ K
                 </kbd>
+            )}
+            {id && (
+                <div
+                    role="button"
+                    onClick={onCreate}
+                    className="ml-auto flex items-center gap-x-2">
+                    <div className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm
+                    hover:bg-neutral-300 dark:hover:bg-neutral-600">
+                        <Plus className="h-4 w-4 text-muted-foreground"/>
+                    </div>
+                </div>
             )}
         </div>
     )

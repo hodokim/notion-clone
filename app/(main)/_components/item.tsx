@@ -1,6 +1,6 @@
 "use client";
 
-import {ChevronDown, ChevronsRight, LucideIcon, Plus} from "lucide-react";
+import {ChevronDown, ChevronsRight, LucideIcon, MoreHorizontal, Plus} from "lucide-react";
 import {Id} from "@/convex/_generated/dataModel";
 import {cn} from "@/lib/utils";
 import {Skeleton} from "@/components/ui/skeleton";
@@ -8,6 +8,12 @@ import {useMutation} from "convex/react";
 import {api} from "@/convex/_generated/api";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
+import {DropdownMenu,
+        DropdownMenuTrigger,
+        DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuSeparator
+} from "@/components/ui/dropdown-menu";
 
 interface ItemProps {
     label: string;
@@ -114,11 +120,25 @@ export const Item = ({
                 </kbd>
             )}
             {id && (
-                <div
-                    role="button"
-                    onClick={onCreate}
-                    className="ml-auto flex items-center gap-x-2">
-                    <div className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm
+                <div className="ml-auto flex items-center gap-x-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger
+                            onClick={(e)=> e.stopPropagation()}
+                            asChild
+                        >
+                            <div
+                                role="button"
+                                className="opacity-0 group-hover:opacity-100 h-full ml-auto
+                                rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                            >
+                                <MoreHorizontal className="h-4 w-4 text-muted-foreground"/>
+                            </div>
+                        </DropdownMenuTrigger>
+                    </DropdownMenu>
+                    <div
+                        role="button"
+                        onClick={onCreate}
+                        className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm
                     hover:bg-neutral-300 dark:hover:bg-neutral-600">
                         <Plus className="h-4 w-4 text-muted-foreground"/>
                     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import {ChevronDown, ChevronsRight, LucideIcon, MoreHorizontal, Plus} from "lucide-react";
+import {ChevronDown, ChevronsRight, LucideIcon, MoreHorizontal, Plus, Trash} from "lucide-react";
 import {Id} from "@/convex/_generated/dataModel";
 import {cn} from "@/lib/utils";
 import {Skeleton} from "@/components/ui/skeleton";
@@ -14,6 +14,8 @@ import {DropdownMenu,
         DropdownMenuItem,
         DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
+import {useUser} from "@clerk/clerk-react";
+import React from "react";
 
 interface ItemProps {
     label: string;
@@ -46,8 +48,24 @@ export const Item = ({
     onExpand,
     expanded
 }: ItemProps) => {
+    const {user} = useUser();
     const router = useRouter();
     const create = useMutation(api.documents.create);
+    const archive = useMutation(api.documents.archive);
+
+    const onArchive = (
+        event: React.MouseEvent<HTMLDivElement,MouseEvent>
+    ) => {
+        event.stopPropagation();
+        if(!id) return;
+        const promise = archive({id});
+
+        toast.promise(promise, {
+            loading: "노트를 휴지통으로 이동 중입니다...",
+            success: "노트가 휴지통으로 이동되었습니다!",
+            error: "노트를 휴지통으로 이동시키는데 실패했습니다."
+        });
+    };
 
     const handleExpand = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -134,6 +152,21 @@ export const Item = ({
                                 <MoreHorizontal className="h-4 w-4 text-muted-foreground"/>
                             </div>
                         </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            className="w-60"
+                            align="start"
+                            side="right"
+                            forceMount
+                        >
+                            <DropdownMenuItem onClick={onArchive}>
+                                <Trash className="h-4 w-4 mr-2"/>
+                                Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator/>
+                            <div className="text-xs text-muted-foreground p-2">
+                                Last edited by: {user?.fullName}
+                            </div>
+                        </DropdownMenuContent>
                     </DropdownMenu>
                     <div
                         role="button"

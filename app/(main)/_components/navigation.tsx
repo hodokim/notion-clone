@@ -1,15 +1,20 @@
 "use client";
 
-import {ChevronsLeft, MenuIcon, PlusCircle, Search, Settings} from "lucide-react";
+import {ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash} from "lucide-react";
 import React, {ElementRef, useEffect, useRef, useState} from "react";
 import {useMediaQuery} from "usehooks-ts";
 import {usePathname} from "next/navigation";
 import {useMutation} from "convex/react";
-
+import {toast} from "sonner";
 
 import {cn} from "@/lib/utils";
 import {api} from "@/convex/_generated/api";
-import {toast} from "sonner";
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+} from "@/components/ui/popover";
+
 
 import {UserItem} from "./user-item";
 import {Item} from "./item";
@@ -155,6 +160,21 @@ export const Navigation = () =>{
                 </div>
                 <div className="mt-4">
                     <DocumentList />
+                    <Item
+                        onClick={handleCreate}
+                        icon={Plus}
+                        label="새 노트 만들기"/>
+                    <Popover>
+                        <PopoverTrigger className="w-full mt-4">
+                            <Item label="휴지통" icon={Trash} />
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="p-0 w-72"
+                            side={isMobile ? "bottom" : "right"}
+                        >
+                            <p className="font-">휴지통</p>
+                        </PopoverContent>
+                    </Popover>
                 </div>
                 <div
                     onMouseDown={handleMouseDown}

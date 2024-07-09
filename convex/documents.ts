@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import {Id} from "./_generated/dataModel";
+import {Doc, Id} from "./_generated/dataModel";
 
 export const archive = mutation({
     args: {id: v.id("documents")},
@@ -49,7 +49,7 @@ export const archive = mutation({
 
         return document;
     }
-})
+});
 
 export const getSidebar = query({
     args : {
@@ -76,7 +76,7 @@ export const getSidebar = query({
             .collect();
         return documents;
     }
-})
+});
 export const create = mutation({
     args: {
         title: v.string(),
@@ -99,4 +99,65 @@ export const create = mutation({
         })
         return document;
     }
-})
+});
+
+export const getTrash = query({
+    handler: async(ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+        if (!identity) {
+            throw new Error("인증되지 않았습니다.");
+        }
+
+        const userId = identity.subject;
+
+        const documents = await ctx.db
+            .query("documents")
+            .withIndex("by_user",(q)=> q.eq("userId", userId))
+            .filter((q)=>
+                q.eq(q.field("isArchived"), true),
+                )
+            .order("desc")
+            .collect();
+
+        return documents;
+    }
+});
+
+export const restore = mutation({
+    args: { id: v.id("documents")},
+    handler: async(ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+        if (!identity) {
+            throw new Error("인증되지 않았습니다.");
+        }
+
+        const userId = identity.subject;
+
+        const existingDocument = await ctx.db.get(args.id);
+
+        if(!existingDocument){
+            throw new Error("노트를 찾을 수 없습니다.");
+        }
+
+        if(existingDocument.userId !== userId){
+            throw new Error("권한이 없습니다.");
+        }
+
+        const options: Partial<Doc<"documents">> = {
+            isArchived:false,
+        };
+
+        if(existingDocument.parentDocument){
+            const parent = await ctx.db.get(existingDocument.parentDocument);
+            if(parent?.isArchived){
+                options.parentDocument = undefined;
+            }
+        }
+
+        await ctx.db.patch(args.id, options);
+
+        return existingDocument;
+    }
+});
+
+

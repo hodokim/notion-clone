@@ -19,6 +19,7 @@ import {
 import {UserItem} from "./user-item";
 import {Item} from "./item";
 import {DocumentList} from "@/app/(main)/_components/document-list";
+import {TrashBox} from "@/app/(main)/_components/trash-box";
 
 export const Navigation = () =>{
     const pathname = usePathname();
@@ -172,7 +173,7 @@ export const Navigation = () =>{
                             className="p-0 w-72"
                             side={isMobile ? "bottom" : "right"}
                         >
-                            <p className="font-">휴지통</p>
+                            <TrashBox/>
                         </PopoverContent>
                     </Popover>
                 </div>

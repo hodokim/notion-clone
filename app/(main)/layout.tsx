@@ -6,7 +6,7 @@ import React from "react";
 
 import {Spinner} from "@/components/spinner";
 import {Navigation} from "@/app/(main)/_components/navigation";
-import {SearchCommand} from "@/components/saerch-command";
+import {SearchCommand} from "@/components/search-command";
 
 
 const MainLayout = ({

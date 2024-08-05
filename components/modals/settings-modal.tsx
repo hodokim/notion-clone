@@ -26,7 +26,7 @@ export const SettingsModal = () => {
                             디스플레이
                         </Label>
                         <span className="text-[0.8rem] text-muted-foreground">
-                            당신의 Bnote 환경을 만들어보세요.
+                            당신이 원하는 Bnote 환경을 설정해보세요.
                         </span>
                     </div>
                     <ModeToggle />

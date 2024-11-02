@@ -24,7 +24,11 @@ export const Navbar = (
     });
 
     if(document === undefined) {
-        return <p>문서를 불러오는 중입니다...</p>
+        return (
+            <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center">
+                <Title.Skeleton />
+            </nav>
+        )
     }
 
     if(document === null){

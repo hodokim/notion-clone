@@ -16,7 +16,7 @@ interface DocumentIdPageProps {
 
 const DocumentIdPage = ({
     params
-                        }: DocumentIdPageProps) => {
+}: DocumentIdPageProps) => {
     const document = useQuery(api.documents.getById, {
         documentId: params.documentId
     });
